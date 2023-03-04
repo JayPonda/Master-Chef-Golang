@@ -1,6 +1,7 @@
 package handler
 
 import (
+	cook "main/Cook"
 	services "main/Services"
 	"time"
 )
@@ -11,7 +12,9 @@ func Handle() error {
 
 	loggerFileName := time.Now().Format("20060102150405")
 
-	err := initialCall(loggerFileName, loggerChan)
+	eventHandlerChan := make(chan cook.PostStruct)
+
+	err := initialCall(loggerFileName, loggerChan, eventHandlerChan)
 
 	return err
 }

@@ -20,8 +20,8 @@ const (
 
 	// description
 	InitialtLogger         = "Initial logger"
-	InitialEventListener   = "Initial eListener"
-	InitialEventLooper     = "Initial eLooper"
+	InitialEventHandler    = "Initial event-handler"
+	InitialEventLooper     = "Initial event-Looper"
 	StartStap              = "Stap start"
 	Check                  = "Check"
 	EndStap                = "Stap end"
