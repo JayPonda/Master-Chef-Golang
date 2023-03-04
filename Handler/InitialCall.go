@@ -2,6 +2,7 @@ package handler
 
 import (
 	"errors"
+	"fmt"
 	services "main/Services"
 	static "main/Static"
 	"time"
@@ -26,7 +27,7 @@ func initialCall(loggerFileName string, loggerChan chan services.LogMessaage) er
 		loggerChan <- preLoggerStartMsg
 		resFromLogger.TimeStamp = time.Now()
 		loggerChan <- resFromLogger
-	
+		fmt.Println("logger start successfully")
 	}
 			
 	return nil
