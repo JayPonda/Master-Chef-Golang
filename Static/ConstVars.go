@@ -9,6 +9,7 @@ const (
 	CookStart     = "Cook start"
 	CookEnd       = "Cook end"
 	Return        = "Return"
+	ErrorReturn   = "Return Error"
 	Start         = "start"
 	StartAck      = "ack start"
 	End           = "end"
@@ -32,7 +33,10 @@ const (
 	TerminateEventLooper   = "Terminat eLooper"
 
 	// response code
-	AccessGranted        = 200
-	NoAssetsAvalable     = 300
-	DelaiedAccessGranted = 400
+	AccessGranted          = 200
+	AccessGranteds         = "access granted"
+	NoAssetsAvalable       = 300
+	DelaiedAccessGranted   = 400
+	AssetReturnSucessfully = 500
+	ErrorOnReturn          = 600
 )

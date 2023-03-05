@@ -2,22 +2,44 @@ package services
 
 import (
 	cook "main/Cook"
+	distributions "main/Distributions"
 	static "main/Static"
 	"time"
 )
 
-func EventHandler(eventHandlerChan chan cook.PostStruct, loggerChan chan LogMessaage) {
-
-	// make channel to communicate between eventHandler and eventLooper
-	eventLooperChan := make(chan cook.PostStruct)
-
-	loggerChan <- LogMessaage{time.Now(), -102, 0, static.Start, static.InitialEventLooper}
-	go EventLooper(eventLooperChan)
+func EventHandler(eventHandlerChan chan cook.PostStruct) {
 
 	// confirm communication
-	if looperRes := <- eventLooperChan; looperRes.MessageType == static.StartAck{
-		loggerChan <- LogMessaage{time.Now(), -102, 1, static.StartAck, static.InitialEventLooper}
-		eventHandlerChan <- cook.PostStruct{MessageType: static.StartAck, AttachedStap: nil, Channel: nil}
+	eventHandlerChan <- cook.PostStruct{MessageType: static.StartAck, AttachedStap: nil, Channel: nil}
+
+	// recive request
+	for query := range eventHandlerChan{
+
+		// query to get
+		if query.MessageType == static.QueryGet{
+			if ans := distributions.QueryToGetRes(query); ans {
+				query.Channel <- static.AccessGranted
+				continue
+			}
+			go func(host cook.PostStruct){
+				for {
+					if ans := distributions.QueryToGetRes(host); ans {
+						host.Channel <- static.DelaiedAccessGranted
+						return
+					}
+
+					host.Channel <- static.NoAssetsAvalable
+					time.Sleep(500 * time.Millisecond)
+				}
+			}(query)
+		} else if query.MessageType == static.QueryTake{
+			err := distributions.QueryToTakeRes(query)
+			if err != nil {
+				query.Channel <- static.ErrorOnReturn
+			} else {
+				query.Channel <- static.AssetReturnSucessfully
+			}
+		}
 	}
 
 }

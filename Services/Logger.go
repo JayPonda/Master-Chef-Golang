@@ -30,7 +30,7 @@ func LogWritter(loggerChan chan LogMessaage, fileName string) {
 	loggerChan <- LogMessaage{time.Now(), -100, 1, static.StartAck, static.InitialtLogger}
 	
 	for reqToLog := range loggerChan{
-		log.Printf("%27s %-4d %-4d %q %s\n", reqToLog.TimeStamp, reqToLog.ParentPsId, reqToLog.ChildPsId, reqToLog.TypeOfInfo, reqToLog.Additional)
+		log.Printf("%37s %4d %4d %q %s\n", reqToLog.TimeStamp.UTC(), reqToLog.ParentPsId, reqToLog.ChildPsId, reqToLog.TypeOfInfo, reqToLog.Additional)
 	}
 
 }
