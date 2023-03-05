@@ -30,4 +30,9 @@ const (
 	TerminateStartLogger   = "Terminat logger"
 	TerminateEventListener = "Terminat eListener"
 	TerminateEventLooper   = "Terminat eLooper"
+
+	// response code
+	AccessGranted        = 200
+	NoAssetsAvalable     = 300
+	DelaiedAccessGranted = 400
 )
