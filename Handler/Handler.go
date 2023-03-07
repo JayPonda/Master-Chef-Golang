@@ -12,6 +12,7 @@ import (
 func Handle() error {
 
 	// start services
+	// create channel + create filename + calculate waitgroup
 	loggerChan := make(chan services.LogMessaage)
 
 	loggerFileName := time.Now().Format("20060102150405")
@@ -32,9 +33,10 @@ func Handle() error {
 
 	wg.Wait()
 
-	loggerChan <- services.LogMessaage{TimeStamp: time.Now(), ParentPsId: -102, ChildPsId: 0, TypeOfInfo: static.End, Additional: "contest end"}
+	loggerChan <- services.LogMessaage{TimeStamp: time.Now(), ParentPsId: -51, ChildPsId: 0, TypeOfInfo: static.End, Additional: "contest end"}
 
 	// end services
+	terminationCall(loggerChan, eventHandlerChan)
 
 	return err
 }
@@ -45,16 +47,16 @@ func Cook(stap cook.Step) {
 
 func startContest(wg *sync.WaitGroup, eventHandlerChan chan cook.PostStruct, loggerChan chan services.LogMessaage) {
 
-	loggerChan <- services.LogMessaage{TimeStamp: time.Now(), ParentPsId: -102, ChildPsId: 0, TypeOfInfo: static.Start, Additional: "contest start in three seconds"}
+	loggerChan <- services.LogMessaage{TimeStamp: time.Now(), ParentPsId: -51, ChildPsId: 0, TypeOfInfo: static.Start, Additional: "contest start in three seconds"}
 	time.Sleep(1 * time.Second)
-	loggerChan <- services.LogMessaage{TimeStamp: time.Now(), ParentPsId: -102, ChildPsId: 1, TypeOfInfo: static.Start, Additional: "--3--"}
-	fmt.Println("--3--")
+	loggerChan <- services.LogMessaage{TimeStamp: time.Now(), ParentPsId: -51, ChildPsId: 1, TypeOfInfo: static.Start, Additional: "--3--"}
+	fmt.Println("--- contest start in 3 seconds ---")
 	time.Sleep(1 * time.Second)
-	loggerChan <- services.LogMessaage{TimeStamp: time.Now(), ParentPsId: -102, ChildPsId: 1, TypeOfInfo: static.Start, Additional: "--2--"}
-	fmt.Println("--2--")
+	loggerChan <- services.LogMessaage{TimeStamp: time.Now(), ParentPsId: -51, ChildPsId: 1, TypeOfInfo: static.Start, Additional: "--2--"}
+	fmt.Println("--- contest start in 2 seconds ---")
 	time.Sleep(1 * time.Second)
-	loggerChan <- services.LogMessaage{TimeStamp: time.Now(), ParentPsId: -102, ChildPsId: 1, TypeOfInfo: static.Start, Additional: "--1--"}
-	fmt.Println("--1--")
+	loggerChan <- services.LogMessaage{TimeStamp: time.Now(), ParentPsId: -51, ChildPsId: 1, TypeOfInfo: static.Start, Additional: "--1--"}
+	fmt.Println("--- contest start in 1 seconds ---")
 
 	for _, recipy := range static.RecipyList {
 
@@ -109,6 +111,6 @@ func ContestRecipy(racipy cook.Recipy, wg *sync.WaitGroup, eventHandlerChan chan
 	}
 
 	loggerChan <- services.LogMessaage{TimeStamp: time.Now(), ParentPsId: racipy.Id, ChildPsId: -2, TypeOfInfo: static.EndRecipy, Additional: racipy.Name + " complated!!!"}
-
+	fmt.Printf("Id: %d, Name: %s complated!!!\n", racipy.Id, racipy.Name)
 	wg.Done()
 }
