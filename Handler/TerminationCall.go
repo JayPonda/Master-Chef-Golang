@@ -5,14 +5,10 @@ import (
 	cook "main/Cook"
 	services "main/Services"
 	static "main/Static"
-	"sync"
 	"time"
 )
 
 func terminationCall(loggerChan chan services.LogMessaage, eventHandlerChan chan cook.PostStruct) error {
-
-	var wg sync.WaitGroup
-	wg.Add(1)
 
 	// terminate eventHandler
 	loggerChan <- services.LogMessaage{TimeStamp: time.Now(), ParentPsId: static.EventHandlerService, ChildPsId: static.EndService, TypeOfInfo: static.End, Additional: static.TerminateEventListener}
@@ -30,9 +26,6 @@ func terminationCall(loggerChan chan services.LogMessaage, eventHandlerChan chan
 	if resFromLogger := <-loggerChan; resFromLogger.TypeOfInfo == static.EndAck {
 		fmt.Println("logger service terminated")
 	}
-
-	wg.Done()
-	wg.Wait()
 
 	close(eventHandlerChan)
 	close(loggerChan)

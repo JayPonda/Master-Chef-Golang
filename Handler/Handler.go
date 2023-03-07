@@ -50,13 +50,13 @@ func startContest(wg *sync.WaitGroup, eventHandlerChan chan cook.PostStruct, log
 	loggerChan <- services.LogMessaage{TimeStamp: time.Now(), ParentPsId: -51, ChildPsId: 0, TypeOfInfo: static.Start, Additional: "contest start in three seconds"}
 	time.Sleep(1 * time.Second)
 	loggerChan <- services.LogMessaage{TimeStamp: time.Now(), ParentPsId: -51, ChildPsId: 1, TypeOfInfo: static.Start, Additional: "--3--"}
-	fmt.Println("--- contest start in 3 seconds ---")
+	fmt.Print("\r--- contest start in 3 seconds ---")
 	time.Sleep(1 * time.Second)
 	loggerChan <- services.LogMessaage{TimeStamp: time.Now(), ParentPsId: -51, ChildPsId: 1, TypeOfInfo: static.Start, Additional: "--2--"}
-	fmt.Println("--- contest start in 2 seconds ---")
+	fmt.Print("\r--- contest start in 2 seconds ---")
 	time.Sleep(1 * time.Second)
 	loggerChan <- services.LogMessaage{TimeStamp: time.Now(), ParentPsId: -51, ChildPsId: 1, TypeOfInfo: static.Start, Additional: "--1--"}
-	fmt.Println("--- contest start in 1 seconds ---")
+	fmt.Print("\r--- contest start in 1 seconds ---\n")
 
 	for _, recipy := range static.RecipyList {
 
