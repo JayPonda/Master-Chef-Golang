@@ -4,6 +4,7 @@ const (
 
 	// status
 	Requested     = "Requested"
+	RequestReturn = "Request Return"
 	ReRequest     = "Re-request"
 	Wait          = "Wait"
 	CookStart     = "Cook start"

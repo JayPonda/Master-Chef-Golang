@@ -2,39 +2,47 @@ package distributions
 
 import (
 	"errors"
-	"fmt"
 	cook "main/Cook"
 )
 
 func QueryToGetRes(p cook.PostStruct) bool {
+	muxOccupiedResouriceArray.Lock()
 	AssetList.Lock()
+	defer muxOccupiedResouriceArray.Unlock()
 	defer AssetList.Unlock()
-	res := AssetList.RList[p.AttachedStap.RequiredRes]
-	// fmt.Println(res.Quentaty, res.ItemInUse, res.Name, res.ItemInUse < res.Quentaty, p.AttachedStap.ParentRecp, p.AttachedStap.Id)
-	if res.ItemInUse < res.Quentaty {
-		AssetList.OStack = append(AssetList.OStack, p.AttachedStap)
-		res.ItemInUse++
-		return true
+
+	requestedRes := AssetList.RList[p.AttachedStap.RequiredRes]
+
+	if requestedRes.Quentaty-requestedRes.ItemInUse <= 0 {
+		return false
 	}
-	return false
+
+	requestedRes.ItemInUse++
+	occupiedResouriceArray = append(occupiedResouriceArray, p.AttachedStap)
+	return true
 }
 
 func QueryToTakeRes(p cook.PostStruct) error {
+	muxOccupiedResouriceArray.Lock()
 	AssetList.Lock()
+	defer muxOccupiedResouriceArray.Unlock()
 	defer AssetList.Unlock()
-	res := AssetList.RList[p.AttachedStap.RequiredRes]
-	ostack := AssetList.OStack
-	for ind, stap := range ostack {
-		if stap == (p.AttachedStap) {
-			fmt.Println(ostack)
-			fmt.Println(p.AttachedStap.RequiredRes)		
-			AssetList.OStack = append(ostack[:ind], ostack[ind+1:]...)
-			res.ItemInUse--
-			fmt.Println(ostack)
-			fmt.Println(p.AttachedStap.RequiredRes)
-		
+
+	requestedRes := AssetList.RList[p.AttachedStap.RequiredRes]
+
+	for index, occRes := range occupiedResouriceArray {
+		if occRes == p.AttachedStap {
+			requestedRes.ItemInUse--
+
+			if index+1 < len(occupiedResouriceArray) {
+				occupiedResouriceArray = append(occupiedResouriceArray[:index], occupiedResouriceArray[index+1:]...)
+			} else {
+				occupiedResouriceArray = occupiedResouriceArray[:index]
+			}
+
 			return nil
 		}
 	}
-	return errors.New("Asset hasn't aquired by requester")
+
+	return errors.New("asset hasn't aquired by requester")
 }
