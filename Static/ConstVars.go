@@ -46,6 +46,9 @@ const (
 	ErrorOnReturn          = 600
 
 	// service code
+	SystemService       = -51
+	RecipyEnd           = -99
+	RecipyStart         = -100
 	LoggerService       = -101
 	EventHandlerService = -102
 )

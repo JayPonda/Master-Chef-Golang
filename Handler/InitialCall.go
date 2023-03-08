@@ -28,7 +28,7 @@ func initialCall(loggerFileName string, loggerChan chan services.LogMessaage, ev
 		loggerChan <- preLoggerStartMsg
 		resFromLogger.TimeStamp = time.Now()
 		loggerChan <- resFromLogger
-		fmt.Println("logger start successfully")
+		fmt.Println("logger service started")
 	}
 
 	// eventHandler start
